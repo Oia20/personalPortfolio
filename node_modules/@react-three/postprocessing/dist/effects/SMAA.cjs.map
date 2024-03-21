@@ -1,0 +1,1 @@
+{"version":3,"file":"SMAA.cjs","sources":["../../src/effects/SMAA.tsx"],"sourcesContent":["import { SMAAEffect } from 'postprocessing'\nimport { wrapEffect } from '../util'\n\nexport const SMAA = wrapEffect(SMAAEffect)\n"],"names":["wrapEffect","SMAAEffect"],"mappings":";;;;AAGa,MAAA,OAAOA,gBAAWC,eAAU,UAAA;;"}

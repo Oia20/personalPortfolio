@@ -1,0 +1,1 @@
+{"version":3,"file":"ColorDepth.cjs","sources":["../../src/effects/ColorDepth.tsx"],"sourcesContent":["import { ColorDepthEffect } from 'postprocessing'\nimport { wrapEffect } from '../util'\n\nexport const ColorDepth = wrapEffect(ColorDepthEffect)\n"],"names":["wrapEffect","ColorDepthEffect"],"mappings":";;;;AAGa,MAAA,aAAaA,gBAAWC,eAAgB,gBAAA;;"}

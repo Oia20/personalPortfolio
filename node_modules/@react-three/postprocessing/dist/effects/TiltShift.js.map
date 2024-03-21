@@ -1,0 +1,1 @@
+{"version":3,"file":"TiltShift.js","sources":["../../src/effects/TiltShift.tsx"],"sourcesContent":["import { TiltShiftEffect, BlendFunction } from 'postprocessing'\nimport { wrapEffect } from '../util'\n\nexport const TiltShift = wrapEffect(TiltShiftEffect, { blendFunction: BlendFunction.ADD })\n"],"names":[],"mappings":";;AAGO,MAAM,YAAY,WAAW,iBAAiB,EAAE,eAAe,cAAc,IAAK,CAAA;"}

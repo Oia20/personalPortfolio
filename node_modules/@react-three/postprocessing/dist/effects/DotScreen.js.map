@@ -1,0 +1,1 @@
+{"version":3,"file":"DotScreen.js","sources":["../../src/effects/DotScreen.tsx"],"sourcesContent":["import { DotScreenEffect } from 'postprocessing'\nimport { wrapEffect } from '../util'\n\nexport const DotScreen = wrapEffect(DotScreenEffect)\n"],"names":[],"mappings":";;AAGa,MAAA,YAAY,WAAW,eAAe;"}

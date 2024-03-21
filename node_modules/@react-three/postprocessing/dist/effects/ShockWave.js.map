@@ -1,0 +1,1 @@
+{"version":3,"file":"ShockWave.js","sources":["../../src/effects/ShockWave.tsx"],"sourcesContent":["import { ShockWaveEffect } from 'postprocessing'\nimport { wrapEffect } from '../util'\n\nexport const ShockWave = wrapEffect(ShockWaveEffect)\n"],"names":[],"mappings":";;AAGa,MAAA,YAAY,WAAW,eAAe;"}
