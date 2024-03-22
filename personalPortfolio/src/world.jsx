@@ -7,7 +7,7 @@ import * as THREE from 'three'; // Importing THREE library
 import { Bloom, DepthOfField, EffectComposer, Noise, Vignette } from '@react-three/postprocessing'
 
 function GrandExchange() {
-  const gltf = useLoader(GLTFLoader, '/models/osrsGE.glb');
+  const gltf = useLoader(GLTFLoader, './models/osrsGE.glb');
   const group = useRef();
   const boundingBox = new THREE.Box3().setFromObject(gltf.scene);
   const center = new THREE.Vector3();
