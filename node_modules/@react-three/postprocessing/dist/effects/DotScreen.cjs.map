@@ -1,1 +1,0 @@
-{"version":3,"file":"DotScreen.cjs","sources":["../../src/effects/DotScreen.tsx"],"sourcesContent":["import { DotScreenEffect } from 'postprocessing'\nimport { wrapEffect } from '../util'\n\nexport const DotScreen = wrapEffect(DotScreenEffect)\n"],"names":["wrapEffect","DotScreenEffect"],"mappings":";;;;AAGa,MAAA,YAAYA,gBAAWC,eAAe,eAAA;;"}

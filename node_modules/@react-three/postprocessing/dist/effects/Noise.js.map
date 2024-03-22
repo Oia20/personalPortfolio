@@ -1,1 +1,0 @@
-{"version":3,"file":"Noise.js","sources":["../../src/effects/Noise.tsx"],"sourcesContent":["import { NoiseEffect, BlendFunction } from 'postprocessing'\nimport { wrapEffect } from '../util'\n\nexport const Noise = wrapEffect(NoiseEffect, { blendFunction: BlendFunction.COLOR_DODGE })\n"],"names":[],"mappings":";;AAGO,MAAM,QAAQ,WAAW,aAAa,EAAE,eAAe,cAAc,YAAa,CAAA;"}

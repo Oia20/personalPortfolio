@@ -1,1 +1,0 @@
-{"version":3,"file":"BrightnessContrast.js","sources":["../../src/effects/BrightnessContrast.tsx"],"sourcesContent":["import { BrightnessContrastEffect } from 'postprocessing'\nimport { wrapEffect } from '../util'\n\nexport const BrightnessContrast = wrapEffect(BrightnessContrastEffect)\n"],"names":[],"mappings":";;AAGa,MAAA,qBAAqB,WAAW,wBAAwB;"}

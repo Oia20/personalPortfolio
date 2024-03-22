@@ -1,1 +1,0 @@
-{"version":3,"file":"Bloom.js","sources":["../../src/effects/Bloom.tsx"],"sourcesContent":["import { BloomEffect, BlendFunction } from 'postprocessing'\nimport { wrapEffect } from '../util'\n\nexport const Bloom = wrapEffect(BloomEffect, {\n  blendFunction: BlendFunction.ADD,\n})\n"],"names":[],"mappings":";;AAGa,MAAA,QAAQ,WAAW,aAAa;AAAA,EAC3C,eAAe,cAAc;AAC/B,CAAC;"}

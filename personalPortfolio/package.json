@@ -1,19 +1,20 @@
 {
   "name": "personalportfolio",
   "private": true,
-  "version": "0.0.0",
-  "homepage": "https://Oia20.github.io/personalPortfolio/",
+  "version": "0.0.5",
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "predeploy" : "npm run build",
-    "deploy" : "gh-pages -d dist",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d dist",
     "build": "vite build",
     "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview"
   },
   "dependencies": {
     "@react-three/cannon": "^6.6.0",
+    "@react-three/drei": "^9.102.6",
+    "@react-three/postprocessing": "^2.16.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "three": "^0.162.0"

@@ -1,1 +1,0 @@
-{"version":3,"file":"FXAA.cjs","sources":["../../src/effects/FXAA.tsx"],"sourcesContent":["import { FXAAEffect } from 'postprocessing'\nimport { wrapEffect } from '../util'\n\nexport const FXAA = wrapEffect(FXAAEffect)\n"],"names":["wrapEffect","FXAAEffect"],"mappings":";;;;AAGa,MAAA,OAAOA,gBAAWC,eAAU,UAAA;;"}

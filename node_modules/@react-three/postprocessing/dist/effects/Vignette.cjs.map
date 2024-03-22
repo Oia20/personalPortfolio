@@ -1,1 +1,0 @@
-{"version":3,"file":"Vignette.cjs","sources":["../../src/effects/Vignette.tsx"],"sourcesContent":["import { VignetteEffect } from 'postprocessing'\nimport { wrapEffect } from '../util'\n\nexport const Vignette = wrapEffect(VignetteEffect)\n"],"names":["wrapEffect","VignetteEffect"],"mappings":";;;;AAGa,MAAA,WAAWA,gBAAWC,eAAc,cAAA;;"}

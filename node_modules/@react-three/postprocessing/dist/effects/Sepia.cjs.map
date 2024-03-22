@@ -1,1 +1,0 @@
-{"version":3,"file":"Sepia.cjs","sources":["../../src/effects/Sepia.tsx"],"sourcesContent":["import { SepiaEffect } from 'postprocessing'\nimport { wrapEffect } from '../util'\n\nexport const Sepia = wrapEffect(SepiaEffect)\n"],"names":["wrapEffect","SepiaEffect"],"mappings":";;;;AAGa,MAAA,QAAQA,gBAAWC,eAAW,WAAA;;"}

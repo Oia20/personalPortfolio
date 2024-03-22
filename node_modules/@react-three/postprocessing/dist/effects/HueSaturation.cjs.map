@@ -1,1 +1,0 @@
-{"version":3,"file":"HueSaturation.cjs","sources":["../../src/effects/HueSaturation.tsx"],"sourcesContent":["import { HueSaturationEffect } from 'postprocessing'\nimport { wrapEffect } from '../util'\n\nexport const HueSaturation = wrapEffect(HueSaturationEffect)\n"],"names":["wrapEffect","HueSaturationEffect"],"mappings":";;;;AAGa,MAAA,gBAAgBA,gBAAWC,eAAmB,mBAAA;;"}
