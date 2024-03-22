@@ -14,7 +14,7 @@ function GrandExchange() {
   boundingBox.getCenter(center);
   
   return (
-    <group ref={group} position={[-center.x, -center.y -5, -center.z + 1]}> {/* Centering the model */}
+    <group ref={group} position={[-center.x, -center.y, -center.z]}> {/* Centering the model */}
       {gltf.scene && <primitive object={gltf.scene} />}
     </group>
   );
@@ -38,7 +38,7 @@ function CameraOrbit({ orbitRadius, orbitSpeed }) {
       const elapsedTime = clock.current.getElapsedTime();
       camera.position.x = Math.sin(orbitSpeed * elapsedTime) * orbitRadius;
       camera.position.z = Math.cos(orbitSpeed * elapsedTime) * orbitRadius;
-      camera.lookAt(10, 0, 0);
+      camera.lookAt(6, 12, 0);
     };
 
     const animate = () => {
@@ -67,10 +67,9 @@ export default function App() {
         <Vignette eskil={false} offset={0.1} darkness={.4} />
       </EffectComposer>
       <Suspense fallback={<Loader />}>
-        <CameraOrbit orbitRadius={15} orbitSpeed={0.2} />
+        <CameraOrbit orbitRadius={20} orbitSpeed={0.2} />
         <GrandExchange />
       </Suspense>
-      <OrbitControls />
     </Canvas>
   );
 }
