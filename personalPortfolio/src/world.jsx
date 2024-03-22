@@ -7,18 +7,113 @@ import * as THREE from 'three'; // Importing THREE library
 import { Bloom, DepthOfField, EffectComposer, Noise, Vignette } from '@react-three/postprocessing'
 
 function GrandExchange() {
-  const gltf = useLoader(GLTFLoader, './models/osrsGE.glb');
+  const gltf = useLoader(GLTFLoader, './models/Varrock5.glb');
   const group = useRef();
   const boundingBox = new THREE.Box3().setFromObject(gltf.scene);
   const center = new THREE.Vector3();
   boundingBox.getCenter(center);
   
   return (
-    <group ref={group} position={[-center.x, -center.y, -center.z]}> {/* Centering the model */}
+    <group ref={group}> {/* Centering the model */}
       {gltf.scene && <primitive object={gltf.scene} />}
     </group>
   );
 }
+
+function Castle() {
+  const gltf = useLoader(GLTFLoader, './models/Varrock4.glb');
+  const group = useRef();
+  const boundingBox = new THREE.Box3().setFromObject(gltf.scene);
+  const center = new THREE.Vector3();
+  boundingBox.getCenter(center);
+  
+  return (
+    <group ref={group}> {/* Centering the model */}
+      {gltf.scene && <primitive object={gltf.scene} />}
+    </group>
+  );
+}
+
+function Square() {
+  const gltf = useLoader(GLTFLoader, './models/Varrock1.glb');
+  const group = useRef();
+  const boundingBox = new THREE.Box3().setFromObject(gltf.scene);
+  const center = new THREE.Vector3();
+  boundingBox.getCenter(center);
+  
+  return (
+    <group ref={group}> {/* Centering the model */}
+      {gltf.scene && <primitive object={gltf.scene} />}
+    </group>
+  );
+}
+function Cooking() {
+  const gltf = useLoader(GLTFLoader, './models/Varrock2.glb');
+  const group = useRef();
+  const boundingBox = new THREE.Box3().setFromObject(gltf.scene);
+  const center = new THREE.Vector3();
+  boundingBox.getCenter(center);
+  
+  return (
+    <group ref={group}> {/* Centering the model */}
+      {gltf.scene && <primitive object={gltf.scene} />}
+    </group>
+  );
+}
+function Barbarian() {
+  const gltf = useLoader(GLTFLoader, './models/Varrock3.glb');
+  const group = useRef();
+  const boundingBox = new THREE.Box3().setFromObject(gltf.scene);
+  const center = new THREE.Vector3();
+  boundingBox.getCenter(center);
+  
+  return (
+    <group ref={group}> {/* Centering the model */}
+      {gltf.scene && <primitive object={gltf.scene} />}
+    </group>
+  );
+}
+function Edgeville() {
+  const gltf = useLoader(GLTFLoader, './models/Varrock6.glb');
+  const group = useRef();
+  const boundingBox = new THREE.Box3().setFromObject(gltf.scene);
+  const center = new THREE.Vector3();
+  boundingBox.getCenter(center);
+  
+  return (
+    <group ref={group}> {/* Centering the model */}
+      {gltf.scene && <primitive object={gltf.scene} />}
+    </group>
+  );
+}
+function Woods1() {
+  const gltf = useLoader(GLTFLoader, './models/Varrock7.glb');
+  const group = useRef();
+  const boundingBox = new THREE.Box3().setFromObject(gltf.scene);
+  const center = new THREE.Vector3();
+  boundingBox.getCenter(center);
+  
+  return (
+    <group ref={group}> {/* Centering the model */}
+      {gltf.scene && <primitive object={gltf.scene} />}
+    </group>
+  );
+}
+
+function Woods2() {
+  const gltf = useLoader(GLTFLoader, './models/Varrock8.glb');
+  const group = useRef();
+  const boundingBox = new THREE.Box3().setFromObject(gltf.scene);
+  const center = new THREE.Vector3();
+  boundingBox.getCenter(center);
+  
+  return (
+    <group ref={group}> {/* Centering the model */}
+      {gltf.scene && <primitive object={gltf.scene} />}
+    </group>
+  );
+}
+
 
 function Loader() {
   const { progress } = useProgress();
@@ -69,6 +164,14 @@ export default function App() {
       <Suspense fallback={<Loader />}>
         <CameraOrbit orbitRadius={20} orbitSpeed={0.2} />
         <GrandExchange />
+        <Castle />
+        <Square />
+        <Cooking />
+        <Barbarian />
+        <Edgeville />
+        <Woods1 />
+        <Woods2 />
+
       </Suspense>
     </Canvas>
   );
