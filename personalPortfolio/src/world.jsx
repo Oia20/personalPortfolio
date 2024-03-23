@@ -1,6 +1,6 @@
 import React, { Suspense, useRef, useState, useEffect } from 'react';
 import { Canvas, useLoader, useThree } from '@react-three/fiber';
-import { OrbitControls, Stars } from '@react-three/drei';
+import { OrbitControls, Stars, Billboard, Text } from '@react-three/drei';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import { Html, useProgress } from '@react-three/drei';
 import * as THREE from 'three'; // Importing THREE library
@@ -66,7 +66,6 @@ function Barbarian() {
   const boundingBox = new THREE.Box3().setFromObject(gltf.scene);
   const center = new THREE.Vector3();
   boundingBox.getCenter(center);
-  
   return (
     <group ref={group}> {/* Centering the model */}
       {gltf.scene && <primitive object={gltf.scene} />}
@@ -79,7 +78,6 @@ function Edgeville() {
   const boundingBox = new THREE.Box3().setFromObject(gltf.scene);
   const center = new THREE.Vector3();
   boundingBox.getCenter(center);
-  
   return (
     <group ref={group}> {/* Centering the model */}
       {gltf.scene && <primitive object={gltf.scene} />}
@@ -92,7 +90,6 @@ function Woods1() {
   const boundingBox = new THREE.Box3().setFromObject(gltf.scene);
   const center = new THREE.Vector3();
   boundingBox.getCenter(center);
-  
   return (
     <group ref={group}> {/* Centering the model */}
       {gltf.scene && <primitive object={gltf.scene} />}
@@ -106,7 +103,6 @@ function Woods2() {
   const boundingBox = new THREE.Box3().setFromObject(gltf.scene);
   const center = new THREE.Vector3();
   boundingBox.getCenter(center);
-  
   return (
     <group ref={group}> {/* Centering the model */}
       {gltf.scene && <primitive object={gltf.scene} />}
@@ -171,7 +167,6 @@ export default function App() {
         <Edgeville />
         <Woods1 />
         <Woods2 />
-
       </Suspense>
     </Canvas>
   );
