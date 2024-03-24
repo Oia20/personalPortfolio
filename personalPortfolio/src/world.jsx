@@ -152,10 +152,10 @@ export default function App() {
       <directionalLight position={[0, 0, 5]} />
       <Stars radius={100} depth={50} count={5000} factor={4} saturation={0} fade speed={1} />
       <EffectComposer>
-        <DepthOfField focusDistance={0} focalLength={0.01} bokehScale={2} height={480} />
+        <DepthOfField focusDistance={0} focalLength={0.001} bokehScale={2} height={480} />
         <Bloom luminanceThreshold={0} luminanceSmoothing={0.9} height={300} />
         <Noise opacity={0.02} />
-        <Vignette eskil={false} offset={0.1} darkness={.4} />
+        <Vignette eskil={false} offset={0.1} darkness={1} />
       </EffectComposer>
       <Suspense fallback={<Loader />}>
         <CameraOrbit orbitRadius={20} orbitSpeed={0.2} />
