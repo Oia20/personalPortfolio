@@ -4,6 +4,45 @@ import { MeshReflectorMaterial, MeshWobbleMaterial, Trail, Text3D, Center, Orbit
 import * as THREE from 'three'; // Importing THREE library
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 
+function BpTab() {
+  const gltf = useLoader(GLTFLoader, './models/bptabbrown.glb');
+  const group = useRef();
+
+  // Handle click event
+  const handleClick = () => {
+    bpset(false)
+  };
+
+  return (
+    <group ref={group} onClick={handleClick}>
+      {gltf.scene && <primitive object={gltf.scene} />}
+    </group>
+  );
+}
+
+function BpBox(props) {
+  // Create a ref to manipulate the mesh
+  const mesh = useRef();
+  const [isHovered, setIsHovered] = useState(false);
+  // Rotate the mesh in each frame
+  useFrame(({ clock }) => {
+      mesh.current.rotation.z = Math.sin(clock.getElapsedTime()) / 4
+  })
+  return (
+    <group position={[-6.4, -1, .2]} rotation={[0, -1.2, 0]}>
+      <mesh
+        ref={mesh}
+        onPointerOver={() => setIsHovered(true)}
+        onPointerOut={() => setIsHovered(false)}
+        scale={isHovered ? [1.2, 1.2, 1.2] : [1, 1, 1]}
+      >
+        <BpTab />
+      </mesh>
+    </group>
+  );
+}
+
+
 function GhTab() {
   const gltf = useLoader(GLTFLoader, './models/ghtabbrown.glb');
   const group = useRef();
@@ -42,43 +81,6 @@ function GhBox(props) {
   );
 }
 
-function BpTab() {
-  const gltf = useLoader(GLTFLoader, './models/bptabbrown.glb');
-  const group = useRef();
-
-  // Handle click event
-  const handleClick = () => {
-    window.open("https://github.com/Oia20", "_blank");
-  };
-
-  return (
-    <group ref={group} onClick={handleClick}>
-      {gltf.scene && <primitive object={gltf.scene} />}
-    </group>
-  );
-}
-
-function BpBox(props) {
-  // Create a ref to manipulate the mesh
-  const mesh = useRef();
-  const [isHovered, setIsHovered] = useState(false);
-  // Rotate the mesh in each frame
-  useFrame(({ clock }) => {
-      mesh.current.rotation.z = Math.sin(clock.getElapsedTime()) / 4
-  })
-  return (
-    <group position={[-6.4, -1, .2]} rotation={[0, -1.2, 0]}>
-      <mesh
-        ref={mesh}
-        onPointerOver={() => setIsHovered(true)}
-        onPointerOut={() => setIsHovered(false)}
-        scale={isHovered ? [1.2, 1.2, 1.2] : [1, 1, 1]}
-      >
-        <BpTab />
-      </mesh>
-    </group>
-  );
-}
 
 
 function InTab() {
@@ -159,10 +161,6 @@ function ImBox(props) {
   );
 }
 
-
-
-
-
 export default function UI() {
     return (
         <Canvas style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0 }} camera={{ fov: 90, position: [0, 0, 5] }}>
@@ -172,7 +170,6 @@ export default function UI() {
             <BpBox />
 
             <InBox />
-
             <ImBox />
             <Center position={[0, 3, 0]}>
               <Text3D font={'Pixelify Sans_Regular.json'}  curveSegments={32} bevelSize={0.04} bevelThickness={0.1} letterSpacing={0.1} size={.8}>
