@@ -149,7 +149,7 @@ function CameraOrbit({ orbitRadius, orbitSpeed }) {
 export default function App() {
   if (memory >= 7) {
     return (
-      <Canvas style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0 }} camera={{ position: [5, 20, 5] }}>
+      <Canvas style={{ background: "#111322",position: 'absolute', top: 0, left: 0, right: 0, bottom: 0 }} camera={{ position: [5, 20, 5] }}>
         <ambientLight intensity={1.5} />
         <directionalLight position={[0, 0, 5]} />
         <Stars radius={100} depth={50} count={5000} factor={4} saturation={0} fade speed={1}/>
@@ -157,7 +157,6 @@ export default function App() {
           <DepthOfField focusDistance={0} focalLength={0.001} bokehScale={2} height={480} />
           <Bloom luminanceThreshold={0} luminanceSmoothing={0.9} height={300} />
           <Noise opacity={0.02} />
-          <Vignette eskil={false} offset={0.1} darkness={0.5} />
         </EffectComposer>
         <Suspense fallback={<Loader />}>
           <CameraOrbit orbitRadius={20} orbitSpeed={0.2} />
@@ -173,7 +172,7 @@ export default function App() {
       </Canvas>
     );
   } return (
-    <Canvas style={{ background: "black", position: 'absolute', top: 0, left: 0, right: 0, bottom: 0 }} camera={{ position: [5, 20, 5] }}>
+    <Canvas style={{ background: "#111322", position: 'absolute', top: 0, left: 0, right: 0, bottom: 0 }} camera={{ position: [5, 20, 5] }}>
     <ambientLight intensity={1.5} />
     <directionalLight position={[0, 0, 5]} />
     <Stars radius={100} depth={50} count={5000} factor={4} saturation={0} fade speed={1} />
