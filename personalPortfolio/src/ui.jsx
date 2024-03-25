@@ -229,6 +229,18 @@ export default function UI() {
               <MeshDistortMaterial distort={.3} speed={2} color="#ffff00"/>
               </Text3D>
             </Center>
+            <Center position={[6, -2.7, 0]}>
+              <Text3D font={'Pixelify Sans_Regular.json'}  curveSegments={32} bevelSize={0.04} bevelThickness={0.1} letterSpacing={0.1} size={.4}>
+                  &
+              <MeshDistortMaterial distort={.3} speed={2} color="#ffff00"/>
+              </Text3D>
+            </Center>
+            <Center position={[6, -3.1, 0]}>
+              <Text3D font={'Pixelify Sans_Regular.json'}  curveSegments={32} bevelSize={0.04} bevelThickness={0.1} letterSpacing={0.1} size={.4}>
+                  Contact
+              <MeshDistortMaterial distort={.3} speed={2} color="#ffff00"/>
+              </Text3D>
+            </Center>
         </Canvas>
     );
 }
