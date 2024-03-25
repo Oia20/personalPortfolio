@@ -126,7 +126,7 @@ function ImTab() {
 
   // Handle click event
   const handleClick = () => {
-    window.open("./about.html", "_blank");
+    window.open("https://oia20.github.io/PortfolioAbout/", "_blank");
   };
 
   return (
