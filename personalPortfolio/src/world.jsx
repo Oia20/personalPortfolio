@@ -116,7 +116,7 @@ function Loader() {
   const { progress } = useProgress();
   return (
     <Html center>
-      <h1>{progress} % loaded</h1>
+      <h1>{Math.ceil(progress)} % loaded</h1>
     </Html>
   );
 }
@@ -149,8 +149,8 @@ function CameraOrbit({ orbitRadius, orbitSpeed }) {
 export default function App() {
   if (memory >= 7) {
     return (
-      <Canvas style={{ background: "#111322",position: 'absolute', top: 0, left: 0, right: 0, bottom: 0 }} camera={{ position: [5, 20, 5] }}>
-        <ambientLight intensity={1.5} />
+      <Canvas style={{ background: "linear-gradient(70deg, #940B92, #864AF9, #0F0F0F)",position: 'absolute', top: 0, left: 0, right: 0, bottom: 0 }} camera={{ position: [5, 20, 5] }}>
+        <ambientLight intensity={0.7} />
         <directionalLight position={[0, 0, 5]} />
         <Stars radius={100} depth={50} count={5000} factor={4} saturation={0} fade speed={1}/>
         <EffectComposer>
@@ -172,7 +172,7 @@ export default function App() {
       </Canvas>
     );
   } return (
-    <Canvas style={{ background: "#111322", position: 'absolute', top: 0, left: 0, right: 0, bottom: 0 }} camera={{ position: [5, 20, 5] }}>
+    <Canvas style={{ background: "linear-gradient(70deg, #940B92, #864AF9, #0F0F0F)", position: 'absolute', top: 0, left: 0, right: 0, bottom: 0 }} camera={{ position: [5, 20, 5] }}>
     <ambientLight intensity={1.5} />
     <directionalLight position={[0, 0, 5]} />
     <Stars radius={100} depth={50} count={5000} factor={4} saturation={0} fade speed={1} />

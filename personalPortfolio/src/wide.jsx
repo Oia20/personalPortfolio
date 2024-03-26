@@ -163,7 +163,9 @@ function BpTab() {
   export default function Wide() {
       return (
           <Canvas style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0 }} camera={{ fov: 90, position: [0, 0, 5] }}>
-              <directionalLight position={[0, 0, 5]} />
+              <directionalLight position={[0, 0, 3]} />
+              <ambientLight intensity={.05}/>
+              <OrbitControls maxDistance={7} minDistance={1} enablePan={false} maxAzimuthAngle={1.5} minAzimuthAngle={-1.5} maxPolarAngle={2} enableDamping enableRotate enableZoom minPolarAngle={1}/>
               <GhBox />
   
               <BpBox />
