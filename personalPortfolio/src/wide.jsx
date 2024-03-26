@@ -1,5 +1,5 @@
 import React, { Suspense, useRef, useState, useEffect } from 'react';
-import { Canvas, useLoader, useThree, useFrame } from '@react-three/fiber';
+import { Canvas, useLoader, useThree, useFrame} from '@react-three/fiber';
 import { MeshReflectorMaterial, MeshWobbleMaterial, Trail, Text3D, Center, OrbitControls, MeshDistortMaterial, Wireframe, Image } from '@react-three/drei';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 
@@ -161,13 +161,36 @@ function BpTab() {
   }
   
   export default function Wide() {
+    const [first, setFirst] = useState(true)
+    function First() {
+      if (first) {
+        return (
+          <group>
+          <Center position={[0, -3.4, 0]}>
+          <Text3D font={'Pixelify Sans_Regular.json'}  curveSegments={32} bevelSize={0.04} bevelThickness={0.1} letterSpacing={0.1} size={.3}>
+              *This Website is 3D
+          <MeshWobbleMaterial factor={.1} speed={1} color="red"/>
+          </Text3D>
+          </Center>
+          <Center position={[0, -4.0, 0]}>
+          <Text3D font={'Pixelify Sans_Regular.json'}  curveSegments={32} bevelSize={0.04} bevelThickness={0.1} letterSpacing={0.1} size={.3}>
+              Click and drag to look around*
+          <MeshWobbleMaterial factor={.1} speed={1} color="red"/>
+          </Text3D>
+          </Center>
+        </group>
+        
+        )
+      }
+    }
+
       return (
-          <Canvas style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0 }} camera={{ fov: 90, position: [0, 0, 5] }}>
+          <Canvas style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0 }} camera={{ fov: 90, position: [0, 0, 5] }} onClick={() => setFirst(false)}>
               <directionalLight position={[0, 0, 3]} />
               <ambientLight intensity={.05}/>
               <OrbitControls maxDistance={7} minDistance={1} enablePan={false} maxAzimuthAngle={1.5} minAzimuthAngle={-1.5} maxPolarAngle={2} enableDamping enableRotate enableZoom minPolarAngle={1}/>
               <GhBox />
-  
+              <First />
               <BpBox />
   
               <InBox />

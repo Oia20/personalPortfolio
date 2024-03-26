@@ -161,15 +161,37 @@ function BpTab() {
   }
   
   export default function Skin() {
+    const [first, setFirst] = useState(true)
+    function First() {
+      if (first) {
+        return (
+          <group>
+          <Center position={[0, 9, 0]} rotation={[.7, 0, 0]}>
+          <Text3D font={'Pixelify Sans_Regular.json'}  curveSegments={0} bevelSize={0.04} bevelThickness={0.01} letterSpacing={0.1} size={.3}>
+              *Press, Drag, or Pinch
+          <MeshWobbleMaterial factor={.1} speed={1} color="red"/>
+          </Text3D>
+          </Center>
+          <Center position={[0, 8.2, 0]} rotation={[.7, 0, 0]}>
+          <Text3D font={'Pixelify Sans_Regular.json'}  curveSegments={32} bevelSize={0.04} bevelThickness={0.01} letterSpacing={0.1} size={.3}>
+              to Look Around*
+          <MeshWobbleMaterial factor={.1} speed={1} color="red"/>
+          </Text3D>
+          </Center>
+        </group>
+        )
+      }
+    }
+
       return (
-          <Canvas style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0 }} camera={{ fov: 130, position: [0, 0, 5] }}>
+          <Canvas style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0 }} camera={{ fov: 130, position: [0, 0, 5] }} onClick={() => setFirst(false)}>
               <OrbitControls maxDistance={7} minDistance={1} enablePan={false} maxAzimuthAngle={1.5} minAzimuthAngle={-1.5} maxPolarAngle={2} enableDamping enableRotate enableZoom minPolarAngle={1}/>
 
               <directionalLight position={[0, 0, 5]} />
               <GhBox />
   
               <BpBox />
-  
+              {/* <First /> */}
               <InBox />
               <ImBox />
               <Center position={[0, 7, 0]}>
