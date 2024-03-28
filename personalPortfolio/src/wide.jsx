@@ -1,6 +1,6 @@
 import React, { Suspense, useRef, useState, useEffect } from 'react';
 import { Canvas, useLoader, useThree, useFrame} from '@react-three/fiber';
-import { Stars, useProgress, useHelper, MeshReflectorMaterial, MeshWobbleMaterial, Float, Trail, Text3D, Center, OrbitControls, MeshDistortMaterial, Wireframe, Image } from '@react-three/drei';
+import { Stars, useProgress, useHelper, Sparkles, MeshReflectorMaterial, MeshWobbleMaterial, Float, Trail, Text3D, Center, OrbitControls, MeshDistortMaterial, Wireframe, Image } from '@react-three/drei';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import { DirectionalLight, LightProbe, DirectionalLightHelper, AmbientLight } from 'three';
 
@@ -199,11 +199,22 @@ export default function Wide() {
   
     return (
       // onClick={() => setFirst(false)
-      <Canvas style={{ background: "linear-gradient(70deg, #940B92, #864AF9, #0F0F0F)" ,position: 'absolute', top: 0, left: 0, right: 0, bottom: 0 }} camera={{ fov: 90, position: [25, -8,20] }}>
+      <Canvas style={{ background: "linear-gradient(70deg, #201658, #1597E5, #201658)" ,position: 'absolute', top: 0, left: 0, right: 0, bottom: 0 }} camera={{ fov: 90, position: [25, -8,20] }}>
         <Suspense fallback={Loader}>
-          <OrbitControls target={[0,-10,0]} maxDistance={50} minDistance={1} enablePan={false} maxPolarAngle={2} enableDamping enableRotate enableZoom/>
+          <OrbitControls target={[0,-10,0]} maxDistance={50} minDistance={1} enablePan={false} maxPolarAngle={1.8} enableDamping enableRotate enableZoom/>
           {/* <directionalLight color={"#005F00"} intensity={1} ref={dirLight} /> */}
           <ambientLight intensity={.3}/>
+          <Sparkles scale={14} size={5} position={[0,-8,0]} count={40}/>
+          <Sparkles scale={14} size={5} position={[11,-8,0]} count={40}/>
+          <Sparkles scale={14} size={5} position={[-11,-8,0]} count={40}/>
+          <Sparkles scale={14} size={5} position={[0,-8,11]} count={40}/>
+          <Sparkles scale={14} size={5} position={[0,-8,-11]} count={40}/>
+          <Sparkles scale={14} size={5} position={[11,-8,11]} count={40}/>
+          <Sparkles scale={14} size={5} position={[-11,-8,11]} count={40}/>
+          <Sparkles scale={14} size={5} position={[11,-8,-11]} count={40}/>
+          <Sparkles scale={14} size={5} position={[-11,-8,-11]} count={40}/>
+
+
 
           <Light />
           <Float>

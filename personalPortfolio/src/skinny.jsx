@@ -1,6 +1,6 @@
 import React, { Suspense, useRef, useState, useEffect } from 'react';
 import { Canvas, useLoader, useThree, useFrame} from '@react-three/fiber';
-import { Stars, useHelper, useProgress, MeshReflectorMaterial, MeshWobbleMaterial, Float, Trail, Text3D, Center, OrbitControls, MeshDistortMaterial, Wireframe, Image } from '@react-three/drei';
+import { Stars, Sparkles, useHelper, useProgress, MeshReflectorMaterial, MeshWobbleMaterial, Float, Trail, Text3D, Center, OrbitControls, MeshDistortMaterial, Wireframe, Image } from '@react-three/drei';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import { DirectionalLight } from 'three';
 
@@ -195,10 +195,19 @@ export default function Wide() {
   
     return (
       // onClick={() => setFirst(false)
-      <Canvas style={{ background: "linear-gradient(70deg, #940B92, #864AF9, #0F0F0F)" ,position: 'absolute', top: 0, left: 0, right: 0, bottom: 0 }} camera={{ fov: 100, position: [40, -6,30] }}>
+      <Canvas style={{ background: "linear-gradient(70deg, #201658, #1597E5, #201658)" ,position: 'absolute', top: 0, left: 0, right: 0, bottom: 0 }} camera={{ fov: 120, position: [30, -8,20] }}>
         <Suspense fallback={Loader}>
           <OrbitControls target={[0,-10,0]} maxDistance={50} minDistance={1} enablePan={false} maxPolarAngle={2} enableDamping enableRotate enableZoom/>
           <ambientLight intensity={.2}/>
+          <Sparkles scale={14} size={5} position={[0,-8,0]} count={20}/>
+          <Sparkles scale={14} size={5} position={[11,-8,0]} count={20}/>
+          <Sparkles scale={14} size={5} position={[-11,-8,0]} count={20}/>
+          <Sparkles scale={14} size={5} position={[0,-8,11]} count={20}/>
+          <Sparkles scale={14} size={5} position={[0,-8,-11]} count={20}/>
+          <Sparkles scale={14} size={5} position={[11,-8,11]} count={20}/>
+          <Sparkles scale={14} size={5} position={[-11,-8,11]} count={20}/>
+          <Sparkles scale={14} size={5} position={[11,-8,-11]} count={20}/>
+          <Sparkles scale={14} size={5} position={[-11,-8,-11]} count={20}/>
 
           <Light />
           <Float>
@@ -211,7 +220,7 @@ export default function Wide() {
           <Projects />
           <Git />
           </Float>
-          <Stars />
+          <Stars count={750}/>
           <mesh position={[-2,-9,16]} rotation={[0,1,0]}>
             <Text3D font={"Oblygasi_Regular.json"} size={1.5}>
               Github
