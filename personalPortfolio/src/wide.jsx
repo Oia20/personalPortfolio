@@ -1,7 +1,8 @@
 import React, { Suspense, useRef, useState, useEffect } from 'react';
 import { Canvas, useLoader, useThree, useFrame} from '@react-three/fiber';
-import { Stars, useProgress, MeshReflectorMaterial, MeshWobbleMaterial, Float, Trail, Text3D, Center, OrbitControls, MeshDistortMaterial, Wireframe, Image } from '@react-three/drei';
+import { Stars, useProgress, useHelper, MeshReflectorMaterial, MeshWobbleMaterial, Float, Trail, Text3D, Center, OrbitControls, MeshDistortMaterial, Wireframe, Image } from '@react-three/drei';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
+import { DirectionalLight, LightProbe, DirectionalLightHelper, AmbientLight } from 'three';
 
 function Loader() {
   const { progress } = useProgress();
@@ -184,75 +185,94 @@ export default function Wide() {
       </group>
     );
   }
+  const Light = () => {
+    const dirLight = useRef<DirectionalLight>(!null);
+  
+    return (
+      <>
+        <directionalLight color={"whitesmoke"} intensity={1.5} useRef={dirLight} position={[10, 5,10]}/>
+        <directionalLight color={"blue"} intensity={.1} useRef={dirLight} position={[10, 5,10]}/>
+        {/* <ambientLight /> */}
+      </>
+    );
+  };
+  
     return (
       // onClick={() => setFirst(false)
       <Canvas style={{ background: "linear-gradient(70deg, #940B92, #864AF9, #0F0F0F)" ,position: 'absolute', top: 0, left: 0, right: 0, bottom: 0 }} camera={{ fov: 90, position: [25, -8,20] }}>
         <Suspense fallback={Loader}>
           <OrbitControls target={[0,-10,0]} maxDistance={50} minDistance={1} enablePan={false} maxPolarAngle={2} enableDamping enableRotate enableZoom/>
-          <ambientLight />
+          {/* <directionalLight color={"#005F00"} intensity={1} ref={dirLight} /> */}
+          <ambientLight intensity={.3}/>
+
+          <Light />
           <Float>
           <Ocean />
+          <Float floatIntensity={.5} floatingRange={.5} rotationIntensity={.3}>
           <About />
+          </Float>
+          <Float floatIntensity={.5} floatingRange={.5} rotationIntensity={.4}>
           <Linked />
           <Projects />
           <Git />
+          </Float>
           <Stars />
           <mesh position={[-2,-9,16]} rotation={[0,1,0]}>
-            <Text3D font={"Pixelify Sans_Regular.json"} size={1.5}>
+            <Text3D font={"Oblygasi_Regular.json"} size={1.5}>
               Github
             <MeshDistortMaterial distort={.3} speed={2} color="black"/>
             </Text3D>
           </mesh>
 
           <mesh position={[-6,-3,19]} rotation={[0,1,0]}>
-            <Text3D font={"Pixelify Sans_Regular.json"} size={1.5}>
+            <Text3D font={"Oblygasi_Regular.json"} size={1.5}>
               LinkedIn
             <MeshDistortMaterial distort={.2} speed={2} color="blue"/>
             </Text3D>
           </mesh>          
           
           <mesh position={[13,-13,-4]} rotation={[0,.8,0]}>
-            <Text3D font={"Pixelify Sans_Regular.json"} size={1.5}>
+            <Text3D font={"Oblygasi_Regular.json"} size={1.5}>
               Projects
             <MeshDistortMaterial distort={.2} speed={2} color="crimson"/>
             </Text3D>
           </mesh>
           <mesh position={[-9,-6,-8]} rotation={[0,0,0]}>
-            <Text3D font={"Pixelify Sans_Regular.json"} size={1.5}>
+            <Text3D font={"Oblygasi_Regular.json"} size={1.5}>
               Hi! I'm Jacob Dement!
             <MeshDistortMaterial distort={.1} speed={2} color="#ffff00"/>
             </Text3D>
           </mesh>
           <mesh position={[-7,-8,-8]} rotation={[0,0,0]}>
-            <Text3D font={"Pixelify Sans_Regular.json"} size={1}>
+            <Text3D font={"Oblygasi_Regular.json"} size={1}>
               ~ Software Developer
             <MeshDistortMaterial distort={.1} speed={2} color="#ffff00"/>
             </Text3D>
           </mesh>
 
           <mesh position={[-15,-6, 16]} rotation={[0,1.5,0]}>
-            <Text3D font={"Pixelify Sans_Regular.json"} size={1.5}>
+            <Text3D font={"Oblygasi_Regular.json"} size={1.5}>
               Click me or the boat
             <MeshDistortMaterial distort={.1} speed={2} color="crimson"/>
             </Text3D>
           </mesh>
 
           <mesh position={[-15,-8, 16]} rotation={[0,1.5,0]}>
-            <Text3D font={"Pixelify Sans_Regular.json"} size={1.5}>
+            <Text3D font={"Oblygasi_Regular.json"} size={1.5}>
               To travel to
             <MeshDistortMaterial distort={.1} speed={2} color="crimson"/>
             </Text3D>
           </mesh>
 
           <mesh position={[-15,-10, 16]} rotation={[0,1.5,0]}>
-            <Text3D font={"Pixelify Sans_Regular.json"} size={1.5}>
+            <Text3D font={"Oblygasi_Regular.json"} size={1.5}>
               my about page.
             <MeshDistortMaterial distort={.1} speed={2} color="crimson"/>
             </Text3D>
           </mesh>
 
           <mesh position={[-10,8,0]} rotation={[0,0,0]}>
-            <Text3D font={"Pixelify Sans_Regular.json"} size={1}>
+            <Text3D font={"Oblygasi_Regular.json"} size={1}>
               Click boat to travel to my room!
             <MeshDistortMaterial distort={.1} speed={2} color="whitesmoke"/>
             </Text3D>
