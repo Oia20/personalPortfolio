@@ -14,6 +14,12 @@ function Loader() {
   }
   
 export default function Wide() {
+  const [zoomed, setZoomed] = useState(false)
+
+  function Scroll() {
+    setZoomed(true)
+  }
+
 
   function LoadOcean() {
     const gltf = useLoader(GLTFLoader, './models/ocean.glb');
@@ -149,6 +155,20 @@ export default function Wide() {
     );
   }  
   
+  function Zoom() {
+    if (!zoomed) {
+    return (
+      <mesh position={[15,-12, 16]} rotation={[0,1.5,0]}>
+      <Text3D font={"Oblygasi_Regular.json"} size={1.5}>
+        Try zooming in!
+      <MeshDistortMaterial distort={.1} speed={2} color="hotpink"/>
+      </Text3D>
+    </mesh>
+    )
+  }
+  }
+
+
   function LoadProjects() {
     const gltf = useLoader(GLTFLoader, './models/Projects.glb');
     const group = useRef();
@@ -187,18 +207,18 @@ export default function Wide() {
   
     return (
       <>
-        <directionalLight color={"whitesmoke"} intensity={1.5} useRef={dirLight} position={[10, 5,10]}/>
-        <directionalLight color={"blue"} intensity={.1} useRef={dirLight} position={[10, 5,10]}/>
+        <directionalLight color={"blue"} intensity={1} useRef={dirLight} position={[10, 5,10]}/>
+        <directionalLight color={"whitesmoke"} intensity={1} useRef={dirLight} position={[10, 5,10]}/>
       </>
     );
   };
   
     return (
       // onClick={() => setFirst(false)
-      <Canvas style={{ background: "linear-gradient(70deg, #201658, #1597E5, #201658)" ,position: 'absolute', top: 0, left: 0, right: 0, bottom: 0 }} camera={{ fov: 120, position: [30, -8,20] }}>
+      <Canvas style={{ background: "linear-gradient(70deg, #201658, #1597E5, #201658)" ,position: 'absolute', top: 0, left: 0, right: 0, bottom: 0 }} camera={{ fov: 120, position: [30, -8,20] }} onWheel={Scroll}>
         <Suspense fallback={Loader}>
           <OrbitControls target={[0,-10,0]} maxDistance={50} minDistance={1} enablePan={false} maxPolarAngle={2} enableDamping enableRotate enableZoom/>
-          <ambientLight intensity={.2}/>
+          <ambientLight intensity={.9}/>
           <Sparkles scale={14} size={5} position={[0,-8,0]} count={20}/>
           <Sparkles scale={14} size={5} position={[11,-8,0]} count={20}/>
           <Sparkles scale={14} size={5} position={[-11,-8,0]} count={20}/>
@@ -274,7 +294,7 @@ export default function Wide() {
             <MeshDistortMaterial distort={.1} speed={2} color="crimson"/>
             </Text3D>
           </mesh>
-
+          <Zoom />
           <mesh position={[-10,8,0]} rotation={[0,0,0]}>
             <Text3D font={"Oblygasi_Regular.json"} size={1}>
               Click boat to travel to my room!
