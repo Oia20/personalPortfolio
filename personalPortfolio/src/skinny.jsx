@@ -158,7 +158,7 @@ export default function Wide() {
   function Zoom() {
     if (!zoomed) {
     return (
-      <mesh position={[15,-12, 16]} rotation={[0,1.5,0]}>
+      <mesh position={[15,0, 16]} rotation={[0,1.5,0]}>
       <Text3D font={"Oblygasi_Regular.json"} size={1.5}>
         Try zooming in!
       <MeshDistortMaterial distort={.1} speed={2} color="hotpink"/>
@@ -215,7 +215,7 @@ export default function Wide() {
   
     return (
       // onClick={() => setFirst(false)
-      <Canvas style={{ background: "linear-gradient(70deg, #201658, #1597E5, #201658)" ,position: 'absolute', top: 0, left: 0, right: 0, bottom: 0 }} camera={{ fov: 120, position: [30, -8,20] }} onWheel={Scroll}>
+      <Canvas style={{ background: "linear-gradient(70deg, #201658, #1597E5, #201658)" ,position: 'absolute', top: 0, left: 0, right: 0, bottom: 0 }} camera={{ fov: 120, position: [30, -8,20] }} onClick={Scroll}>
         <Suspense fallback={Loader}>
           <OrbitControls target={[0,-10,0]} maxDistance={50} minDistance={1} enablePan={false} maxPolarAngle={2} enableDamping enableRotate enableZoom/>
           <ambientLight intensity={.9}/>
