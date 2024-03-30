@@ -177,7 +177,7 @@ export default function Wide() {
   
     // Handle click event
     const handleClick = () => {
-      console.log("Projects Clicked")
+      window.open("https://oia20.github.io/Projects/", "_blank")
     };
   
     return (
