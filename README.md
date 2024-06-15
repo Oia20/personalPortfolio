@@ -1,3 +1,3 @@
 This is my personal portfolio
 
-Stack: React Three Fiber, HTML
+Stack: React Three Fiber, HTML, CSS
