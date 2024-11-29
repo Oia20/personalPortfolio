@@ -60,7 +60,7 @@ export default function Wide() {
     // Handle click event
     const handleClick = () => {
       console.log("About Clicked")
-      window.open("https://oia20.github.io/PortfolioAbout/", "_blank")
+      window.open("https://jacob.dement.dev", "_blank")
     };
   
     return (
