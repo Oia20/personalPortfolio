@@ -3,6 +3,7 @@ import { Canvas, useLoader, useThree, useFrame} from '@react-three/fiber';
 import { Stars, Sparkles, useHelper, useProgress, MeshReflectorMaterial, MeshWobbleMaterial, Float, Trail, Text3D, Center, OrbitControls, MeshDistortMaterial, Wireframe, Image } from '@react-three/drei';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import { DirectionalLight } from 'three';
+import { Vector3 } from 'three';
 
 function Loader() {
     const { progress } = useProgress();
@@ -13,13 +14,68 @@ function Loader() {
     );
   }
   
+function CameraController() {
+  const { camera } = useThree();
+  const [targetIndex, setTargetIndex] = useState(0);
+  const currentPosition = useRef(new Vector3(30, -8, 20));
+  const currentLookAt = useRef(new Vector3(0, -10, 0));
+  const scrollTimeout = useRef(null);
+  const lastScrollTime = useRef(Date.now());
+
+  const cameraPositions = [
+    { position: new Vector3(0, -3, 4), target: new Vector3(0, -5, -1) },
+    { position: new Vector3(23, -8, -2), target: new Vector3(0, -10, -15) },
+    { position: new Vector3(7, -8, 26), target: new Vector3(4, -8, 22) },
+    { position: new Vector3(25, -2, 35), target: new Vector3(0, -5, 0) },
+  ];
+
+  useEffect(() => {
+    const handleScroll = (event) => {
+      event.preventDefault();
+      const now = Date.now();
+      if (now - lastScrollTime.current < 400) return;
+      lastScrollTime.current = now;
+
+      if (scrollTimeout.current) clearTimeout(scrollTimeout.current);
+      const delta = event.deltaY || event.wheelDelta || -event.detail;
+      const direction = Math.sign(delta);
+
+      scrollTimeout.current = setTimeout(() => {
+        setTargetIndex((prev) => {
+          const next = prev + direction;
+          return Math.max(0, Math.min(next, cameraPositions.length - 1));
+        });
+      }, 50);
+    };
+
+    window.addEventListener('wheel', handleScroll, { passive: false });
+    window.addEventListener('mousewheel', handleScroll, { passive: false });
+    window.addEventListener('DOMMouseScroll', handleScroll, { passive: false });
+
+    return () => {
+      window.removeEventListener('wheel', handleScroll);
+      window.removeEventListener('mousewheel', handleScroll);
+      window.removeEventListener('DOMMouseScroll', handleScroll);
+      if (scrollTimeout.current) clearTimeout(scrollTimeout.current);
+    };
+  }, []);
+
+  useFrame(() => {
+    const lerpFactor = 0.03;
+    const targetPosition = cameraPositions[targetIndex].position;
+    const targetLookAt = cameraPositions[targetIndex].target;
+
+    currentPosition.current.lerp(targetPosition, lerpFactor);
+    currentLookAt.current.lerp(targetLookAt, lerpFactor);
+
+    camera.position.copy(currentPosition.current);
+    camera.lookAt(currentLookAt.current);
+  });
+
+  return null;
+}
+
 export default function Wide() {
-  const [zoomed, setZoomed] = useState(false)
-
-  function Scroll() {
-    setZoomed(true)
-  }
-
 
   function LoadOcean() {
     const gltf = useLoader(GLTFLoader, './models/ocean.glb');
@@ -155,18 +211,7 @@ export default function Wide() {
     );
   }  
   
-  function Zoom() {
-    if (!zoomed) {
-    return (
-      <mesh position={[15,0, 16]} rotation={[0,1.5,0]}>
-      <Text3D font={"Oblygasi_Regular.json"} size={1.5}>
-        Try zooming in!
-      <MeshDistortMaterial distort={.1} speed={2} color="hotpink"/>
-      </Text3D>
-    </mesh>
-    )
-  }
-  }
+ 
 
 
   function LoadProjects() {
@@ -215,9 +260,9 @@ export default function Wide() {
   
     return (
       // onClick={() => setFirst(false)
-      <Canvas style={{ background: "linear-gradient(70deg, #201658, #1597E5, #201658)" ,position: 'absolute', top: 0, left: 0, right: 0, bottom: 0 }} camera={{ fov: 120, position: [30, -8,20] }} onClick={Scroll}>
+      <Canvas style={{ background: "linear-gradient(70deg, #201658, #1597E5, #201658)" ,position: 'absolute', top: 0, left: 0, right: 0, bottom: 0 }} camera={{ fov: 125, position: [30, -8,20] }}>
         <Suspense fallback={Loader}>
-          <OrbitControls target={[0,-10,0]} maxDistance={50} minDistance={1} enablePan={false} maxPolarAngle={2} enableDamping enableRotate enableZoom/>
+          <CameraController />
           <ambientLight intensity={.9}/>
           <Sparkles scale={14} size={5} position={[0,-8,0]} count={20}/>
           <Sparkles scale={14} size={5} position={[11,-8,0]} count={20}/>
@@ -269,36 +314,8 @@ export default function Wide() {
           </mesh>
           <mesh position={[-7,-8,-8]} rotation={[0,0,0]}>
             <Text3D font={"Oblygasi_Regular.json"} size={1}>
-              ~ Software Developer
+              ~ Software Engineer
             <MeshDistortMaterial distort={.1} speed={2} color="#ffff00"/>
-            </Text3D>
-          </mesh>
-
-          <mesh position={[-15,-6, 16]} rotation={[0,1.5,0]}>
-            <Text3D font={"Oblygasi_Regular.json"} size={1.5}>
-              Click me or the boat
-            <MeshDistortMaterial distort={.1} speed={2} color="crimson"/>
-            </Text3D>
-          </mesh>
-
-          <mesh position={[-15,-8, 16]} rotation={[0,1.5,0]}>
-            <Text3D font={"Oblygasi_Regular.json"} size={1.5}>
-              To travel to
-            <MeshDistortMaterial distort={.1} speed={2} color="crimson"/>
-            </Text3D>
-          </mesh>
-
-          <mesh position={[-15,-10, 16]} rotation={[0,1.5,0]}>
-            <Text3D font={"Oblygasi_Regular.json"} size={1.5}>
-              my about page.
-            <MeshDistortMaterial distort={.1} speed={2} color="crimson"/>
-            </Text3D>
-          </mesh>
-          <Zoom />
-          <mesh position={[-10,8,0]} rotation={[0,0,0]}>
-            <Text3D font={"Oblygasi_Regular.json"} size={1}>
-              Click boat to travel to my room!
-            <MeshDistortMaterial distort={.1} speed={2} color="whitesmoke"/>
             </Text3D>
           </mesh>
           </Float >
