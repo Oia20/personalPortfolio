@@ -61,6 +61,7 @@ function CameraController() {
     };
 
     const handleTouchMove = (event) => {
+      event.preventDefault(); // Prevent default scrolling behavior
       if (event.touches) {
         const delta = lastTouchY.current - event.touches[0].clientY;
         handleScroll({ deltaY: delta }); // Pass a custom object for delta
