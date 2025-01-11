@@ -21,6 +21,7 @@ function CameraController() {
   const currentLookAt = useRef(new Vector3(0, -10, 0));
   const scrollTimeout = useRef(null);
   const lastScrollTime = useRef(Date.now());
+  const lastTouchY = useRef(0);
 
   const cameraPositions = [
     { position: new Vector3(0, -3, 4), target: new Vector3(0, -5, -1) },
@@ -31,13 +32,19 @@ function CameraController() {
 
   useEffect(() => {
     const handleScroll = (event) => {
-      event.preventDefault();
+      // Ensure the event is a valid object with preventDefault
+      if (event && typeof event.preventDefault === 'function') {
+        event.preventDefault();
+      }
+
       const now = Date.now();
       if (now - lastScrollTime.current < 400) return;
       lastScrollTime.current = now;
 
       if (scrollTimeout.current) clearTimeout(scrollTimeout.current);
-      const delta = event.deltaY || event.wheelDelta || -event.detail;
+      
+      // Calculate delta based on the event type
+      const delta = event.deltaY || event.wheelDelta || -event.detail || (event.touches ? lastTouchY.current - event.touches[0].clientY : 0);
       const direction = Math.sign(delta);
 
       scrollTimeout.current = setTimeout(() => {
@@ -48,14 +55,30 @@ function CameraController() {
       }, 50);
     };
 
+    // Add touch event listener for mobile
+    const handleTouchStart = (event) => {
+      lastTouchY.current = event.touches[0].clientY;
+    };
+
+    const handleTouchMove = (event) => {
+      if (event.touches) {
+        const delta = lastTouchY.current - event.touches[0].clientY;
+        handleScroll({ deltaY: delta }); // Pass a custom object for delta
+      }
+    };
+
     window.addEventListener('wheel', handleScroll, { passive: false });
     window.addEventListener('mousewheel', handleScroll, { passive: false });
     window.addEventListener('DOMMouseScroll', handleScroll, { passive: false });
+    window.addEventListener('touchstart', handleTouchStart, { passive: false });
+    window.addEventListener('touchmove', handleTouchMove, { passive: false });
 
     return () => {
       window.removeEventListener('wheel', handleScroll);
       window.removeEventListener('mousewheel', handleScroll);
       window.removeEventListener('DOMMouseScroll', handleScroll);
+      window.removeEventListener('touchstart', handleTouchStart);
+      window.removeEventListener('touchmove', handleTouchMove);
       if (scrollTimeout.current) clearTimeout(scrollTimeout.current);
     };
   }, []);
@@ -260,7 +283,7 @@ export default function Wide() {
   
     return (
       // onClick={() => setFirst(false)
-      <Canvas style={{ background: "linear-gradient(70deg, #201658, #1597E5, #201658)" ,position: 'absolute', top: 0, left: 0, right: 0, bottom: 0 }} camera={{ fov: 125, position: [30, -8,20] }}>
+      <Canvas style={{ background: "linear-gradient(70deg, #201658, #1597E5, #201658)" ,position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, maxHeight:"100vh"}} camera={{ fov: 125, position: [30, -8,20] }}>
         <Suspense fallback={Loader}>
           <CameraController />
           <ambientLight intensity={.9}/>
