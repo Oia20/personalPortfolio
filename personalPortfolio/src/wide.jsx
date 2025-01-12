@@ -12,6 +12,7 @@ import {
 } from '@react-three/drei';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import { Vector3, DirectionalLight } from 'three';
+import { useSpring, animated } from '@react-spring/three';
 
 const Loader = () => {
   
@@ -267,10 +268,17 @@ function LoadGit() {
 
 function Git() {
   const mesh = useRef();
+  const [hovered, setHovered] = useState(false);
+
   return (
     <group>
-      <mesh ref={mesh}>
+      <mesh 
+        ref={mesh}
+        onPointerOver={() => setHovered(true) }
+        onPointerOut={() => setHovered(false)}>
         <LoadGit />
+      {hovered ? <Sparkles noise={.1} count={30} size={8} scale={4} position={[1, -12, 15]}/>: null}
+
       </mesh>
     </group>
   );
@@ -293,10 +301,18 @@ function LoadLinked() {
 
 function Linked() {
   const mesh = useRef();
+  const [hovered, setHovered] = useState(false);
+
+
   return (
     <group>
-      <mesh ref={mesh}>
+      <mesh         
+        ref={mesh}
+        onPointerOver={() => setHovered(true) }
+        onPointerOut={() => setHovered(false)}>
         <LoadLinked />
+      {hovered ? <Sparkles noise={.1} count={30} size={8} scale={4} position={[-4, -5.5, 16]}/>: null}
+
       </mesh>
     </group>
   );
@@ -311,20 +327,30 @@ function LoadProjects() {
   };
 
   return (
-    <group ref={group} onClick={handleClick}>
+    <animated.group
+      ref={group}
+      onClick={handleClick}
+    >
       {gltf.scene && <primitive object={gltf.scene} />}
-    </group>
+    </animated.group>
   );
 }
 
 function Projects() {
   const mesh = useRef();
+  const [hovered, setHovered] = useState(false);
+
   return (
     <group>
-      <mesh ref={mesh}>
+      <mesh
+        ref={mesh}
+        onPointerOver={() => setHovered(true) }
+        onPointerOut={() => setHovered(false)}
+      >
         <LoadProjects />
-        <MeshWobbleMaterial />
+
       </mesh>
+      {hovered ? <Sparkles count={100} size={8} scale={4} position={[14, -7.9, -7.5]}/>: null}
     </group>
   );
 }
@@ -395,10 +421,10 @@ export default function Wide() {
             </Text3D>
           </mesh>
 
-          <mesh position={[13, -13, -4]} rotation={[0, 0.8, 0]}>
+          <mesh position={[9, -13, -2]} rotation={[0, 0.8, 0]}>
             <Text3D font={"Oblygasi_Regular.json"} size={1.5}>
-              Projects
-              <MeshDistortMaterial distort={0.2} speed={2} color="crimson" />
+              Projects & About
+              <MeshDistortMaterial distort={0.1} speed={2} color="crimson" />
             </Text3D>
           </mesh>
 
