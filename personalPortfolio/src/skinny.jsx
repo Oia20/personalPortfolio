@@ -1,19 +1,134 @@
 import React, { Suspense, useRef, useState, useEffect } from 'react';
-import { Canvas, useLoader, useThree, useFrame} from '@react-three/fiber';
-import { Stars, Sparkles, useHelper, useProgress, MeshReflectorMaterial, MeshWobbleMaterial, Float, Trail, Text3D, Center, OrbitControls, MeshDistortMaterial, Wireframe, Image } from '@react-three/drei';
+import { Canvas, useLoader, useThree, useFrame } from '@react-three/fiber';
+import { 
+  Stars, 
+  useProgress, 
+  Html,
+  Sparkles, 
+  MeshWobbleMaterial, 
+  Float, 
+  Text3D, 
+  MeshDistortMaterial 
+} from '@react-three/drei';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
-import { DirectionalLight } from 'three';
-import { Vector3 } from 'three';
-
-function Loader() {
-    const { progress } = useProgress();
-    return (
-      <Html center>
-        <h1>{Math.ceil(progress)} % loaded</h1>
-      </Html>
-    );
-  }
+import { Vector3, DirectionalLight } from 'three';
+const Loader = () => {
   
+  const { progress } = useProgress();
+  
+  return (
+    <Html center>
+      <div className="loader-container">
+        <div className="wave-container">
+          {[...Array(12)].map((_, index) => (
+            <div
+              key={index}
+              className="particle"
+              style={{
+                animationDelay: `${index * 0.1}s`,
+                left: `${index * 8}px`
+              }}
+            />
+          ))}
+          {[...Array(12)].map((_, index) => (
+            <div
+              key={`foam-${index}`}
+              className="foam-particle"
+              style={{
+                animationDelay: `${index * 0.1}s`,
+                left: `${index * 8}px`
+              }}
+            />
+          ))}
+        <span className="progress-text">{Math.ceil(progress)}% loaded</span>
+
+        </div>
+      </div>
+
+      <style jsx>{`
+        .loader-container {
+          display: flex;
+          align-items: center;
+          color: white;
+          font-size: 2em;
+        }
+
+        .wave-container {
+          position: relative;
+          width: 100px;
+          height: 60px;
+        }
+
+        .particle {
+          position: absolute;
+          width: 6px;
+          height: 6px;
+          background-color: #4a90e2;
+          border-radius: 50%;
+          animation: wave 2s infinite cubic-bezier(0.45, 0.05, 0.55, 0.95);
+        }
+
+        .foam-particle {
+          position: absolute;
+          width: 4px;
+          height: 4px;
+          background-color: white;
+          border-radius: 50%;
+          animation: foam 2s infinite cubic-bezier(0.45, 0.05, 0.55, 0.95);
+          opacity: 0;
+        }
+
+        .progress-text {
+          color: #4affff;
+
+        }
+
+        @keyframes wave {
+          0% {
+            transform: translate(0, 0) scale(1);
+            background-color: #4affff;
+          }
+          25% {
+            transform: translate(10px, -20px) scale(1.2);
+            background-color: black;
+          }
+          50% {
+            transform: translate(20px, -5px) scale(1.1);
+            background-color: grey;
+          }
+          75% {
+            transform: translate(30px, -25px) scale(0.9);
+            background-color: red;
+          }
+          85% {
+            transform: translate(35px, 0) scale(0.8);
+            background-color: orange;
+          }
+          100% {
+            transform: translate(40px, 0) scale(0.7);
+            opacity: 0;
+            background-color: #102e4a;
+          }
+        }
+
+        @keyframes foam {
+          0% {
+            transform: translate(0, 0) scale(0);
+            opacity: 0;
+          }
+          50% {
+            transform: translate(20px, -15px) scale(1.5);
+            opacity: 0.7;
+          }
+          100% {
+            transform: translate(40px, 0) scale(0.5);
+            opacity: 0;
+          }
+        }
+      `}</style>
+    </Html>
+  );
+};
 function CameraController() {
   const { camera } = useThree();
   const [targetIndex, setTargetIndex] = useState(0);
@@ -283,9 +398,8 @@ export default function Wide() {
   };
   
     return (
-      // onClick={() => setFirst(false)
       <Canvas style={{ background: "linear-gradient(70deg, #201658, #1597E5, #201658)" ,position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, maxHeight:"100vh"}} camera={{ fov: 125, position: [30, -8,20] }}>
-        <Suspense fallback={Loader}>
+        <Suspense fallback={<Loader />}>
           <CameraController />
           <ambientLight intensity={.9}/>
           <Sparkles scale={14} size={5} position={[0,-8,0]} count={20}/>
