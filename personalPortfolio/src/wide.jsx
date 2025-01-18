@@ -141,6 +141,62 @@ function CameraController() {
   const scrollTimeout = useRef(null);
   const lastScrollTime = useRef(Date.now());
   
+  // Add new refs for panning
+  const isDragging = useRef(false);
+  const previousMousePosition = useRef({ x: 0, y: 0 });
+  const panOffset = useRef(new Vector3(0, 0, 0));
+
+  useEffect(() => {
+    const handleMouseDown = (event) => {
+      isDragging.current = true;
+      previousMousePosition.current = {
+        x: event.clientX,
+        y: event.clientY
+      };
+    };
+
+    const handleMouseMove = (event) => {
+      if (!isDragging.current) return;
+
+      const deltaX = (event.clientX - previousMousePosition.current.x) * 0.01;
+      const deltaY = (event.clientY - previousMousePosition.current.y) * 0.01;
+
+      panOffset.current.x += deltaX;
+      panOffset.current.y -= deltaY;
+
+      // Limit the pan range
+      panOffset.current.x = Math.max(-2, Math.min(2, panOffset.current.x));
+      panOffset.current.y = Math.max(-2, Math.min(2, panOffset.current.y));
+
+      previousMousePosition.current = {
+        x: event.clientX,
+        y: event.clientY
+      };
+    };
+
+    const handleMouseUp = () => {
+      isDragging.current = false;
+      // Gradually reset pan offset
+      const resetPan = () => {
+        panOffset.current.lerp(new Vector3(0, 0, 0), 0.1);
+        if (panOffset.current.length() > 0.01) {
+          requestAnimationFrame(resetPan);
+        }
+      };
+      resetPan();
+    };
+
+    window.addEventListener('mousedown', handleMouseDown);
+    window.addEventListener('mousemove', handleMouseMove);
+    window.addEventListener('mouseup', handleMouseUp);
+
+    return () => {
+      window.removeEventListener('mousedown', handleMouseDown);
+      window.removeEventListener('mousemove', handleMouseMove);
+      window.removeEventListener('mouseup', handleMouseUp);
+    };
+  }, []);
+
   useEffect(() => {
     const handleScroll = (event) => {
       event.preventDefault();
@@ -190,7 +246,12 @@ function CameraController() {
     currentPosition.current.lerp(targetPosition, lerpFactor);
     currentLookAt.current.lerp(targetLookAt, lerpFactor);
     
-    camera.position.copy(currentPosition.current);
+    // Apply pan offset to camera position
+    camera.position.copy(currentPosition.current).add(new Vector3(
+      panOffset.current.x,
+      panOffset.current.y,
+      0
+    ));
     camera.lookAt(currentLookAt.current);
   });
 
@@ -253,12 +314,12 @@ function LoadGit() {
   const gltf = useLoader(GLTFLoader, './models/git.glb');
   const group = useRef();
 
-  const handleClick = () => {
-    window.open("https://github.com/Oia20", "_blank");
-  };
-
   return (
-    <group ref={group} onClick={handleClick}>
+    <group 
+      ref={group} 
+      onClick={() => window.open("https://github.com/Oia20", "_blank")}
+      style={{ cursor: 'pointer' }}
+    >
       {gltf.scene && <primitive object={gltf.scene} />}
     </group>
   );
@@ -268,15 +329,21 @@ function Git() {
   const mesh = useRef();
   const [hovered, setHovered] = useState(false);
 
+  useEffect(() => {
+    document.body.style.cursor = hovered ? 'pointer' : 'auto'
+    return () => {
+      document.body.style.cursor = 'auto'
+    }
+  }, [hovered])
+
   return (
     <group>
       <mesh 
         ref={mesh}
-        onPointerOver={() => setHovered(true) }
+        onPointerOver={() => setHovered(true)}
         onPointerOut={() => setHovered(false)}>
         <LoadGit />
-      {hovered ? <Sparkles noise={.1} count={30} size={8} scale={4} position={[1, -12, 15]}/>: null}
-
+        <Sparkles noise={.1} count={30} size={8} scale={4} position={[1, -12, 15]}/>
       </mesh>
     </group>
   );
@@ -286,12 +353,12 @@ function LoadLinked() {
   const gltf = useLoader(GLTFLoader, './models/linkedinn.glb');
   const group = useRef();
 
-  const handleClick = () => {
-    window.open("https://www.linkedin.com/in/jacob-dement-35658b275/", "_blank");
-  };
-
   return (
-    <group ref={group} onClick={handleClick}>
+    <group 
+      ref={group} 
+      onClick={() => window.open("https://www.linkedin.com/in/jacob-dement-35658b275/", "_blank")}
+      style={{ cursor: 'pointer' }}
+    >
       {gltf.scene && <primitive object={gltf.scene} />}
     </group>
   );
@@ -301,16 +368,21 @@ function Linked() {
   const mesh = useRef();
   const [hovered, setHovered] = useState(false);
 
+  useEffect(() => {
+    document.body.style.cursor = hovered ? 'pointer' : 'auto'
+    return () => {
+      document.body.style.cursor = 'auto'
+    }
+  }, [hovered])
 
   return (
     <group>
       <mesh         
         ref={mesh}
-        onPointerOver={() => setHovered(true) }
+        onPointerOver={() => setHovered(true)}
         onPointerOut={() => setHovered(false)}>
         <LoadLinked />
-      {hovered ? <Sparkles noise={.1} count={30} size={8} scale={4} position={[-4, -5.5, 16]}/>: null}
-
+        <Sparkles noise={.1} count={30} size={8} scale={4} position={[-4, -5.5, 16]}/>
       </mesh>
     </group>
   );
@@ -320,14 +392,11 @@ function LoadProjects() {
   const gltf = useLoader(GLTFLoader, './models/Projects.glb');
   const group = useRef();
 
-  const handleClick = () => {
-    window.open("https://jacob.dement.dev", "_blank");
-  };
-
   return (
     <animated.group
       ref={group}
-      onClick={handleClick}
+      onClick={() => window.open("https://jacob.dement.dev", "_blank")}
+      style={{ cursor: 'pointer' }}
     >
       {gltf.scene && <primitive object={gltf.scene} />}
     </animated.group>
@@ -338,17 +407,23 @@ function Projects() {
   const mesh = useRef();
   const [hovered, setHovered] = useState(false);
 
+  useEffect(() => {
+    document.body.style.cursor = hovered ? 'pointer' : 'auto'
+    return () => {
+      document.body.style.cursor = 'auto'
+    }
+  }, [hovered])
+
   return (
     <group>
       <mesh
         ref={mesh}
-        onPointerOver={() => setHovered(true) }
+        onPointerOver={() => setHovered(true)}
         onPointerOut={() => setHovered(false)}
       >
         <LoadProjects />
-
       </mesh>
-      {hovered ? <Sparkles count={100} size={8} scale={4} position={[14, -7.9, -7.5]}/>: null}
+      <Sparkles noise={.1} count={30} size={8} scale={4} position={[14, -7.9, -7.5]}/>
     </group>
   );
 }
