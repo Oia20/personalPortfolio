@@ -1,4 +1,4 @@
-import React, { Suspense, useRef, useState, useEffect } from 'react';
+import React, { Suspense, useRef, useState, useEffect, useContext } from 'react';
 import { Canvas, useLoader, useThree, useFrame } from '@react-three/fiber';
 import { 
   Stars, 
@@ -12,6 +12,8 @@ import {
 } from '@react-three/drei';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import { Vector3, DirectionalLight } from 'three';
+import { CameraContext, CameraProvider } from './CameraContext';
+
 const Loader = () => {
   
   const { progress } = useProgress();
@@ -129,25 +131,18 @@ const Loader = () => {
     </Html>
   );
 };
+
 function CameraController() {
   const { camera } = useThree();
-  const [targetIndex, setTargetIndex] = useState(0);
+  const { targetIndex, setTargetIndex, cameraPositions, setHasScrolled } = useContext(CameraContext);
   const currentPosition = useRef(new Vector3(30, -8, 20));
   const currentLookAt = useRef(new Vector3(0, -10, 0));
   const scrollTimeout = useRef(null);
   const lastScrollTime = useRef(Date.now());
   const lastTouchY = useRef(0);
 
-  const cameraPositions = [
-    { position: new Vector3(0, -3, 4), target: new Vector3(0, -5, -1) },
-    { position: new Vector3(23, -8, -2), target: new Vector3(0, -10, -15) },
-    { position: new Vector3(7, -8, 26), target: new Vector3(4, -8, 22) },
-    { position: new Vector3(25, -2, 35), target: new Vector3(0, -5, 0) },
-  ];
-
   useEffect(() => {
     const handleScroll = (event) => {
-      // Ensure the event is a valid object with preventDefault
       if (event && typeof event.preventDefault === 'function') {
         event.preventDefault();
       }
@@ -158,7 +153,8 @@ function CameraController() {
 
       if (scrollTimeout.current) clearTimeout(scrollTimeout.current);
       
-      // Calculate delta based on the event type
+      setHasScrolled(true);
+      
       const delta = event.deltaY || event.wheelDelta || -event.detail || (event.touches ? lastTouchY.current - event.touches[0].clientY : 0);
       const direction = Math.sign(delta);
 
@@ -197,7 +193,7 @@ function CameraController() {
       window.removeEventListener('touchmove', handleTouchMove);
       if (scrollTimeout.current) clearTimeout(scrollTimeout.current);
     };
-  }, []);
+  }, [setTargetIndex, setHasScrolled]);
 
   useFrame(() => {
     const lerpFactor = 0.03;
@@ -214,7 +210,169 @@ function CameraController() {
   return null;
 }
 
-export default function Wide() {
+export default function Skin() {
+  return (
+    <CameraProvider>
+      <SkinContent />
+    </CameraProvider>
+  );
+}
+
+function SkinContent() {
+  const { hasScrolled, setCameraPosition, targetIndex } = useContext(CameraContext);
+  const [isLoaded, setIsLoaded] = useState(false);
+  const { progress } = useProgress();
+
+  useEffect(() => {
+    if (progress === 100) {
+      setIsLoaded(true);
+    }
+  }, [progress]);
+
+  const sections = [
+    { name: "Welcome" },
+    { name: "Projects" },
+    { name: "Socials" },
+    { name: "Overview" }
+  ];
+
+  return (
+    <>
+      <Canvas style={{ background: "linear-gradient(70deg, #201658, #1597E5, #201658)" ,position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, maxHeight:"100vh"}} camera={{ fov: 125, position: [30, -8,20] }}>
+        <Suspense fallback={<Loader />}>
+          <CameraController />
+          <ambientLight intensity={.9}/>
+          <Sparkles scale={14} size={5} position={[0,-8,0]} count={20}/>
+          <Sparkles scale={14} size={5} position={[11,-8,0]} count={20}/>
+          <Sparkles scale={14} size={5} position={[-11,-8,0]} count={20}/>
+          <Sparkles scale={14} size={5} position={[0,-8,11]} count={20}/>
+          <Sparkles scale={14} size={5} position={[0,-8,-11]} count={20}/>
+          <Sparkles scale={14} size={5} position={[11,-8,11]} count={20}/>
+          <Sparkles scale={14} size={5} position={[-11,-8,11]} count={20}/>
+          <Sparkles scale={14} size={5} position={[11,-8,-11]} count={20}/>
+          <Sparkles scale={14} size={5} position={[-11,-8,-11]} count={20}/>
+
+          <Light />
+          <Float>
+          <Ocean />
+          <Float floatIntensity={.5} floatingRange={.5} rotationIntensity={.3}>
+          <About />
+          </Float>
+          <Float floatIntensity={.5} floatingRange={.5} rotationIntensity={.4}>
+          <Linked />
+          <Projects />
+          <Git />
+          </Float>
+          <Stars count={750}/>
+          <mesh position={[-2,-9,16]} rotation={[0,1,0]}>
+            <Text3D font={"Oblygasi_Regular.json"} size={1.5}>
+              Github
+            <MeshDistortMaterial distort={.3} speed={2} color="black"/>
+            </Text3D>
+          </mesh>
+
+          <mesh position={[-6,-3,19]} rotation={[0,1,0]}>
+            <Text3D font={"Oblygasi_Regular.json"} size={1.5}>
+              LinkedIn
+            <MeshDistortMaterial distort={.2} speed={2} color="blue"/>
+            </Text3D>
+          </mesh>          
+          
+          <mesh position={[13,-13,-4]} rotation={[0,.8,0]}>
+            <Text3D font={"Oblygasi_Regular.json"} size={1.5}>
+              Projects
+            <MeshDistortMaterial distort={.2} speed={2} color="crimson"/>
+            </Text3D>
+          </mesh>
+          <mesh position={[-9,-6,-8]} rotation={[0,0,0]}>
+            <Text3D font={"Oblygasi_Regular.json"} size={1.5}>
+              Hi! I'm Jacob Dement!
+            <MeshDistortMaterial distort={.1} speed={2} color="#ffff00"/>
+            </Text3D>
+          </mesh>
+          <mesh position={[-7,-8,-8]} rotation={[0,0,0]}>
+            <Text3D font={"Oblygasi_Regular.json"} size={1}>
+              ~ Software Engineer
+            <MeshDistortMaterial distort={.1} speed={2} color="#ffff00"/>
+            </Text3D>
+          </mesh>
+          </Float >
+          </Suspense>
+      </Canvas>
+
+      {isLoaded && (
+        <div style={{
+          position: 'fixed',
+          bottom: '20px',
+          left: '50%',
+          transform: 'translateX(-50%)',
+          display: 'flex',
+          flexDirection: 'row',
+          alignItems: 'center',
+          justifyContent: 'center',
+          gap: '15px',
+          zIndex: 1000,
+          backgroundColor: 'rgba(0, 0, 0, 0.5)',
+          padding: '8px 15px',
+          borderRadius: '15px',
+          width: 'auto',
+          maxWidth: '90%'
+        }}>
+          {sections.map((section, index) => (
+            <div 
+              key={index}
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                cursor: 'pointer',
+                opacity: targetIndex === index ? 1 : 0.5,
+                transition: 'opacity 0.3s ease'
+              }}
+              onClick={() => setCameraPosition(index)}
+            >
+              <div style={{
+                width: '6px',
+                height: '6px',
+                borderRadius: '50%',
+                backgroundColor: index <= targetIndex ? '#4affff' : 'white',
+                marginRight: '4px',
+                transition: 'background-color 0.3s ease'
+              }} />
+              <span style={{
+                color: 'white',
+                fontSize: '11px',
+                fontWeight: targetIndex === index ? 'bold' : 'normal'
+              }}>
+                {section.name}
+              </span>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {isLoaded && !hasScrolled && (
+        <div style={{
+          position: 'absolute',
+          bottom: '70px',
+          left: '50%',
+          transform: 'translateX(-50%)',
+          zIndex: 1000,
+        }}>
+          <span style={{
+            color: 'rgba(74, 255, 255, 0.8)',
+            fontSize: '14px',
+            fontFamily: 'Arial, sans-serif',
+            letterSpacing: '1px',
+            textTransform: 'uppercase',
+            animation: 'fadeInOut 2s infinite'
+          }}>
+            Scroll to navigate
+          </span>
+        </div>
+      )}
+    </>
+  );
+}
 
   function LoadOcean() {
     const gltf = useLoader(GLTFLoader, './models/ocean.glb');
@@ -386,78 +544,13 @@ export default function Wide() {
       </group>
     );
   }
-  const Light = () => {
-    const dirLight = useRef<DirectionalLight>(!null);
+  function Light() {
+    const dirLight = useRef();
   
     return (
       <>
-        <directionalLight color={"blue"} intensity={1} useRef={dirLight} position={[10, 5,10]}/>
-        <directionalLight color={"whitesmoke"} intensity={1} useRef={dirLight} position={[10, 5,10]}/>
+        <directionalLight color="blue" intensity={1} ref={dirLight} position={[10, 5, 10]} />
+        <directionalLight color="whitesmoke" intensity={1} ref={dirLight} position={[10, 5, 10]} />
       </>
     );
-  };
-  
-    return (
-      <Canvas style={{ background: "linear-gradient(70deg, #201658, #1597E5, #201658)" ,position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, maxHeight:"100vh"}} camera={{ fov: 125, position: [30, -8,20] }}>
-        <Suspense fallback={<Loader />}>
-          <CameraController />
-          <ambientLight intensity={.9}/>
-          <Sparkles scale={14} size={5} position={[0,-8,0]} count={20}/>
-          <Sparkles scale={14} size={5} position={[11,-8,0]} count={20}/>
-          <Sparkles scale={14} size={5} position={[-11,-8,0]} count={20}/>
-          <Sparkles scale={14} size={5} position={[0,-8,11]} count={20}/>
-          <Sparkles scale={14} size={5} position={[0,-8,-11]} count={20}/>
-          <Sparkles scale={14} size={5} position={[11,-8,11]} count={20}/>
-          <Sparkles scale={14} size={5} position={[-11,-8,11]} count={20}/>
-          <Sparkles scale={14} size={5} position={[11,-8,-11]} count={20}/>
-          <Sparkles scale={14} size={5} position={[-11,-8,-11]} count={20}/>
-
-          <Light />
-          <Float>
-          <Ocean />
-          <Float floatIntensity={.5} floatingRange={.5} rotationIntensity={.3}>
-          <About />
-          </Float>
-          <Float floatIntensity={.5} floatingRange={.5} rotationIntensity={.4}>
-          <Linked />
-          <Projects />
-          <Git />
-          </Float>
-          <Stars count={750}/>
-          <mesh position={[-2,-9,16]} rotation={[0,1,0]}>
-            <Text3D font={"Oblygasi_Regular.json"} size={1.5}>
-              Github
-            <MeshDistortMaterial distort={.3} speed={2} color="black"/>
-            </Text3D>
-          </mesh>
-
-          <mesh position={[-6,-3,19]} rotation={[0,1,0]}>
-            <Text3D font={"Oblygasi_Regular.json"} size={1.5}>
-              LinkedIn
-            <MeshDistortMaterial distort={.2} speed={2} color="blue"/>
-            </Text3D>
-          </mesh>          
-          
-          <mesh position={[13,-13,-4]} rotation={[0,.8,0]}>
-            <Text3D font={"Oblygasi_Regular.json"} size={1.5}>
-              Projects
-            <MeshDistortMaterial distort={.2} speed={2} color="crimson"/>
-            </Text3D>
-          </mesh>
-          <mesh position={[-9,-6,-8]} rotation={[0,0,0]}>
-            <Text3D font={"Oblygasi_Regular.json"} size={1.5}>
-              Hi! I'm Jacob Dement!
-            <MeshDistortMaterial distort={.1} speed={2} color="#ffff00"/>
-            </Text3D>
-          </mesh>
-          <mesh position={[-7,-8,-8]} rotation={[0,0,0]}>
-            <Text3D font={"Oblygasi_Regular.json"} size={1}>
-              ~ Software Engineer
-            <MeshDistortMaterial distort={.1} speed={2} color="#ffff00"/>
-            </Text3D>
-          </mesh>
-          </Float >
-          </Suspense>
-      </Canvas>
-  );
-}
+  }

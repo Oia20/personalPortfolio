@@ -1,4 +1,4 @@
-import React, { Suspense, useRef, useState, useEffect } from 'react';
+import React, { Suspense, useRef, useState, useEffect, useContext } from 'react';
 import { Canvas, useLoader, useThree, useFrame } from '@react-three/fiber';
 import { 
   Stars, 
@@ -13,6 +13,8 @@ import {
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import { Vector3, DirectionalLight } from 'three';
 import { useSpring, animated } from '@react-spring/three';
+import './swipe.css'
+import { CameraContext, CameraProvider } from './CameraContext';
 
 const Loader = () => {
   
@@ -133,19 +135,12 @@ const Loader = () => {
   };
 function CameraController() {
   const { camera } = useThree();
-  const [targetIndex, setTargetIndex] = useState(0);
+  const { targetIndex, setTargetIndex, cameraPositions, setHasScrolled } = useContext(CameraContext);
   const currentPosition = useRef(new Vector3(25, -8, 20));
   const currentLookAt = useRef(new Vector3(0, -10, 0));
   const scrollTimeout = useRef(null);
   const lastScrollTime = useRef(Date.now());
   
-  const cameraPositions = [
-    { position: new Vector3(0, -3, 4), target: new Vector3(0, -5, -1) },
-    { position: new Vector3(23, -8, -2), target: new Vector3(0, -10, -15) },
-    { position: new Vector3(7, -8, 26), target: new Vector3(4, -8, 22) },
-    { position: new Vector3(25, -2, 35), target: new Vector3(0, -5, 0) },
-  ];
-
   useEffect(() => {
     const handleScroll = (event) => {
       event.preventDefault();
@@ -157,6 +152,9 @@ function CameraController() {
 
       // Clear any existing timeout
       if (scrollTimeout.current) clearTimeout(scrollTimeout.current);
+
+      // Set hasScrolled to true on first scroll
+      setHasScrolled(true);
 
       // Detect scroll direction, accounting for both mouse wheel and trackpad
       const delta = event.deltaY || event.wheelDelta || -event.detail;
@@ -182,7 +180,7 @@ function CameraController() {
       window.removeEventListener('DOMMouseScroll', handleScroll);
       if (scrollTimeout.current) clearTimeout(scrollTimeout.current);
     };
-  }, []);
+  }, [setTargetIndex, setHasScrolled]);
 
   useFrame(() => {
     const lerpFactor = 0.03;
@@ -230,7 +228,7 @@ function LoadAbout() {
   const group = useRef();
 
   const handleClick = () => {
-    window.open("https://jacob.dement.dev", "_blank");
+    // window.open("https://jacob.dement.dev", "_blank");
   };
 
   return (
@@ -366,84 +364,253 @@ function Light() {
   );
 }
 
-export default function Wide() {
+function Wide() {
+  return (
+    <CameraProvider>
+      <WideContent />
+    </CameraProvider>
+  );
+}
+
+function WideContent() {
+  const { hasScrolled, setCameraPosition, targetIndex } = useContext(CameraContext);
+  const [isLoaded, setIsLoaded] = useState(false);
+  const { progress } = useProgress();
+
+  useEffect(() => {
+    if (progress === 100) {
+      setIsLoaded(true);
+    }
+  }, [progress]);
+
+  const sections = [
+    { name: "Welcome" },
+    { name: "About & Projects" },
+    { name: "Socials" },
+    { name: "Overview" }
+  ];
+
   return (
     <>
-    <Canvas 
-      style={{ 
-        background: "linear-gradient(70deg, #201658, #1597E5, #201658)",
-        position: 'absolute', 
-        top: 0, 
-        left: 0, 
-        right: 0, 
-        bottom: 0 
-      }} 
-      camera={{ fov: 90, position: [25, -8, 20] }}
-    >
-      <Suspense fallback={<Loader />}>
-        <CameraController />
-        <ambientLight intensity={0.9} />
-        
-        <Sparkles scale={14} size={5} position={[0, -8, 0]} count={40} />
-        <Sparkles scale={14} size={5} position={[11, -8, 0]} count={40} />
-        <Sparkles scale={14} size={5} position={[-11, -8, 0]} count={40} />
-        <Sparkles scale={14} size={5} position={[0, -8, 11]} count={40} />
-        <Sparkles scale={14} size={5} position={[0, -8, -11]} count={40} />
-        <Sparkles scale={14} size={5} position={[11, -8, 11]} count={40} />
-        <Sparkles scale={14} size={5} position={[-11, -8, 11]} count={40} />
-        <Sparkles scale={14} size={5} position={[11, -8, -11]} count={40} />
-        <Sparkles scale={14} size={5} position={[-11, -8, -11]} count={40} />
+      <Canvas 
+        style={{ 
+          background: "linear-gradient(70deg, #201658, #1597E5, #201658)",
+          position: 'absolute', 
+          top: 0, 
+          left: 0, 
+          right: 0, 
+          bottom: 0 
+        }} 
+        camera={{ fov: 90, position: [25, -8, 20] }}
+      >
+        <Suspense fallback={<Loader />}>
+          <CameraController />
+          <ambientLight intensity={0.9} />
+          
+          <Sparkles scale={14} size={5} position={[0, -8, 0]} count={40} />
+          <Sparkles scale={14} size={5} position={[11, -8, 0]} count={40} />
+          <Sparkles scale={14} size={5} position={[-11, -8, 0]} count={40} />
+          <Sparkles scale={14} size={5} position={[0, -8, 11]} count={40} />
+          <Sparkles scale={14} size={5} position={[0, -8, -11]} count={40} />
+          <Sparkles scale={14} size={5} position={[11, -8, 11]} count={40} />
+          <Sparkles scale={14} size={5} position={[-11, -8, 11]} count={40} />
+          <Sparkles scale={14} size={5} position={[11, -8, -11]} count={40} />
+          <Sparkles scale={14} size={5} position={[-11, -8, -11]} count={40} />
 
-        <Light />
-        <Float>
-          <Ocean />
-          <Float floatIntensity={0.5} floatingRange={0.5} rotationIntensity={0.3}>
-            <About />
+          <Light />
+          <Float>
+            <Ocean />
+            <Float floatIntensity={0.5} floatingRange={0.5} rotationIntensity={0.3}>
+              <About />
+            </Float>
+            <Float floatIntensity={0.5} floatingRange={0.5} rotationIntensity={0.4}>
+              <Linked />
+              <Projects />
+              <Git />
+            </Float>
+            <Stars />
+
+            <mesh position={[-2, -9, 16]} rotation={[0, 1, 0]}>
+              <Text3D font={"Oblygasi_Regular.json"} size={1.5}>
+                Github
+                <MeshDistortMaterial distort={0.3} speed={2} color="black" />
+              </Text3D>
+            </mesh>
+
+            <mesh position={[-6, -3, 19]} rotation={[0, 1, 0]}>
+              <Text3D font={"Oblygasi_Regular.json"} size={1.5}>
+                LinkedIn
+                <MeshDistortMaterial distort={0.2} speed={2} color="blue" />
+              </Text3D>
+            </mesh>
+
+            <mesh position={[9, -13, -2]} rotation={[0, 0.8, 0]}>
+              <Text3D font={"Oblygasi_Regular.json"} size={1.5}>
+                Projects & About
+                <MeshDistortMaterial distort={0.1} speed={2} color="crimson" />
+              </Text3D>
+            </mesh>
+
+            <mesh position={[-9, -6, -8]} rotation={[0, 0, 0]}>
+              <Text3D font={"Oblygasi_Regular.json"} size={1.5}>
+                Hi! I'm Jacob Dement!
+                <MeshDistortMaterial distort={0.1} speed={2} color="#ffff00" />
+              </Text3D>
+            </mesh>
+
+            <mesh position={[-7, -8, -8]} rotation={[0, 0, 0]}>
+              <Text3D font={"Oblygasi_Regular.json"} size={1}>
+                ~ Software Engineer
+                <MeshDistortMaterial distort={0.1} speed={2} color="#ffff00" />
+              </Text3D>
+            </mesh>
           </Float>
-          <Float floatIntensity={0.5} floatingRange={0.5} rotationIntensity={0.4}>
-            <Linked />
-            <Projects />
-            <Git />
-          </Float>
-          <Stars />
+        </Suspense>
+      </Canvas>
 
-          <mesh position={[-2, -9, 16]} rotation={[0, 1, 0]}>
-            <Text3D font={"Oblygasi_Regular.json"} size={1.5}>
-              Github
-              <MeshDistortMaterial distort={0.3} speed={2} color="black" />
-            </Text3D>
-          </mesh>
+      {isLoaded && (
+        <div style={{
+          position: 'fixed',
+          left: '40px',
+          top: '50%',
+          transform: 'translateY(-50%)',
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'flex-start',
+          gap: '30px',
+          zIndex: 1000
+        }}>
+          <div style={{
+            position: 'absolute',
+            left: '5px',
+            top: '0',
+            width: '2px',
+            height: '100%',
+            backgroundColor: 'rgba(255, 255, 255, 0.3)',
+            zIndex: -1
+          }} />
+          
+          <div style={{
+            position: 'absolute',
+            left: '5px',
+            top: '0',
+            width: '2px',
+            height: `${(targetIndex / (sections.length - 1)) * 100}%`,
+            backgroundColor: '#4affff',
+            zIndex: -1,
+            transition: 'height 0.3s ease'
+          }} />
 
-          <mesh position={[-6, -3, 19]} rotation={[0, 1, 0]}>
-            <Text3D font={"Oblygasi_Regular.json"} size={1.5}>
-              LinkedIn
-              <MeshDistortMaterial distort={0.2} speed={2} color="blue" />
-            </Text3D>
-          </mesh>
+          {sections.map((section, index) => (
+            <div 
+              key={index}
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                cursor: 'pointer',
+                opacity: targetIndex === index ? 1 : 0.5,
+                transition: 'opacity 0.3s ease'
+              }}
+              onClick={() => setCameraPosition(index)}
+            >
+              <div style={{
+                width: '12px',
+                height: '12px',
+                borderRadius: '50%',
+                backgroundColor: index <= targetIndex ? '#4affff' : 'white',
+                marginRight: '10px',
+                transition: 'background-color 0.3s ease'
+              }} />
+              <span style={{
+                color: 'white',
+                fontSize: '16px',
+                fontWeight: targetIndex === index ? 'bold' : 'normal'
+              }}>
+                {section.name}
+              </span>
+            </div>
+          ))}
+        </div>
+      )}
 
-          <mesh position={[9, -13, -2]} rotation={[0, 0.8, 0]}>
-            <Text3D font={"Oblygasi_Regular.json"} size={1.5}>
-              Projects & About
-              <MeshDistortMaterial distort={0.1} speed={2} color="crimson" />
-            </Text3D>
-          </mesh>
+      {isLoaded && !hasScrolled && (
+        <>
+          <div style={{
+            position: 'absolute',
+            bottom: '40px',
+            left: '50%',
+            transform: 'translateX(-50%)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            zIndex: 1000,   
+            cursor: 'pointer',
+            width: '300px',
+            height: '100px'
+          }}
+          onClick={() => setCameraPosition(1)}
+          className='hi'>
+            <svg 
+              className="scroll-indicator" 
+              xmlns="http://www.w3.org/2000/svg" 
+              viewBox="0 0 40 80"
+              style={{
+                width: '40px',
+                height: '80px',
+                display: 'block'
+              }}
+            >
+              <rect x="0" y="0" width="40" height="80" rx="20" ry="20" fill="rgba(32, 22, 88, 0.4)"/>
 
-          <mesh position={[-9, -6, -8]} rotation={[0, 0, 0]}>
-            <Text3D font={"Oblygasi_Regular.json"} size={1.5}>
-              Hi! I'm Jacob Dement!
-              <MeshDistortMaterial distort={0.1} speed={2} color="#ffff00" />
-            </Text3D>
-          </mesh>
-
-          <mesh position={[-7, -8, -8]} rotation={[0, 0, 0]}>
-            <Text3D font={"Oblygasi_Regular.json"} size={1}>
-              ~ Software Engineer
-              <MeshDistortMaterial distort={0.1} speed={2} color="#ffff00" />
-            </Text3D>
-          </mesh>
-        </Float>
-      </Suspense>
-    </Canvas>
+              <path d="M8 35 L20 47 L32 35" 
+                    fill="none" 
+                    stroke="rgba(74, 255, 255, 0.8)" 
+                    strokeWidth="3" 
+                    strokeLinecap="round"
+                    strokeLinejoin="round">
+                <animate
+                  attributeName="opacity"
+                  values="0.4;1;0.4"
+                  dur="1.5s"
+                  repeatCount="indefinite"/>
+              </path>
+              <path d="M8 25 L20 37 L32 25" 
+                    fill="none" 
+                    stroke="rgba(74, 255, 255, 0.8)" 
+                    strokeWidth="3" 
+                    strokeLinecap="round"
+                    strokeLinejoin="round">
+                <animate
+                  attributeName="opacity"
+                  values="1;0.4;1"
+                  dur="1.5s"
+                  repeatCount="indefinite"/>
+              </path>
+            </svg>
+          </div>
+          
+          <div style={{
+            position: 'absolute',
+            bottom: '20px',
+            left: '50%',
+            transform: 'translateX(-50%)',
+            zIndex: 1000,
+          }}>
+            <span style={{
+              color: 'rgba(74, 255, 255, 0.8)',
+              fontSize: '14px',
+              fontFamily: 'Arial, sans-serif',
+              letterSpacing: '1px',
+              textTransform: 'uppercase',
+              animation: 'fadeInOut 2s infinite'
+            }}>
+              Scroll to navigate
+            </span>
+          </div>
+        </>
+      )}
     </>
   );
 }
+
+export default Wide;
